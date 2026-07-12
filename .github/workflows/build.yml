@@ -49,25 +49,15 @@ jobs:
       - name: "✨ Create working dir"
         run: mkdir -p $kernelDir
 
+      - name: "🐍 Setup Python 2.7"
+        uses: actions/setup-python@v5
+        with:
+          python-version: '2.7'
+
       - name: "⭐ Install prerequisites"
         run: |
           sudo apt-get update
-          
-          # Force download the exact Python 2 binaries from the official Ubuntu security pool
-          wget http://security.ubuntu.com/ubuntu/pool/universe/p/python2.7/libpython2.7-minimal_2.7.18-1~20.04.5_amd64.deb
-          wget http://security.ubuntu.com/ubuntu/pool/universe/p/python2.7/python2.7-minimal_2.7.18-1~20.04.5_amd64.deb
-          wget http://security.ubuntu.com/ubuntu/pool/universe/p/python2.7/libpython2.7-stdlib_2.7.18-1~20.04.5_amd64.deb
-          wget http://security.ubuntu.com/ubuntu/pool/universe/p/python2.7/python2.7_2.7.18-1~20.04.5_amd64.deb
-          wget http://security.ubuntu.com/ubuntu/pool/universe/p/python-defaults/python2-minimal_2.7.18-2_amd64.deb
-          wget http://security.ubuntu.com/ubuntu/pool/universe/p/python-defaults/python2_2.7.18-2_amd64.deb
-          
-          # Install the downloaded debs manually and handle missing minor dependencies safely
-          sudo dpkg -i *.deb || sudo apt-get install -f -y
-          
-          # Clean up the downloaded deb files
-          rm *.deb
-
-          # Now install the rest of your build chain (notice python2 is removed from this line)
+          # Notice python2 is completely removed here because the setup-python step handles it perfectly
           sudo apt-get install -y build-essential bc curl git zip ftp gcc-aarch64-linux-gnu gcc-arm-linux-gnueabi libssl-dev lftp zstd wget libfl-dev python3 libarchive-tools
 
       - name: "🌟 Clone kernel source => (${{ env.kernelRepo }})"
