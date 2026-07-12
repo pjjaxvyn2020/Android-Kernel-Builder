@@ -51,12 +51,24 @@ jobs:
 
       - name: "⭐ Install prerequisites"
         run: |
-          # Add legacy repository to pull deprecated python2 package
-          sudo add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu/ focal universe"
           sudo apt-get update
-          sudo apt-get install -y build-essential bc curl git zip ftp gcc-aarch64-linux-gnu gcc-arm-linux-gnueabi libssl-dev lftp zstd wget libfl-dev python2 python3 libarchive-tools
-          # Remove legacy repo to keep package ecosystem safe
-          sudo add-apt-repository --remove -y "deb http://archive.ubuntu.com/ubuntu/ focal universe"
+          
+          # Force download the exact Python 2 binaries from the official Ubuntu security pool
+          wget http://security.ubuntu.com/ubuntu/pool/universe/p/python2.7/libpython2.7-minimal_2.7.18-1~20.04.5_amd64.deb
+          wget http://security.ubuntu.com/ubuntu/pool/universe/p/python2.7/python2.7-minimal_2.7.18-1~20.04.5_amd64.deb
+          wget http://security.ubuntu.com/ubuntu/pool/universe/p/python2.7/libpython2.7-stdlib_2.7.18-1~20.04.5_amd64.deb
+          wget http://security.ubuntu.com/ubuntu/pool/universe/p/python2.7/python2.7_2.7.18-1~20.04.5_amd64.deb
+          wget http://security.ubuntu.com/ubuntu/pool/universe/p/python-defaults/python2-minimal_2.7.18-2_amd64.deb
+          wget http://security.ubuntu.com/ubuntu/pool/universe/p/python-defaults/python2_2.7.18-2_amd64.deb
+          
+          # Install the downloaded debs manually and handle missing minor dependencies safely
+          sudo dpkg -i *.deb || sudo apt-get install -f -y
+          
+          # Clean up the downloaded deb files
+          rm *.deb
+
+          # Now install the rest of your build chain (notice python2 is removed from this line)
+          sudo apt-get install -y build-essential bc curl git zip ftp gcc-aarch64-linux-gnu gcc-arm-linux-gnueabi libssl-dev lftp zstd wget libfl-dev python3 libarchive-tools
 
       - name: "🌟 Clone kernel source => (${{ env.kernelRepo }})"
         working-directory: ./${{ env.kernelDir }}
