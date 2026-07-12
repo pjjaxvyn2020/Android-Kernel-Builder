@@ -1,9 +1,9 @@
 [  {
     "kernelSource": {
-      "name": "miku-KernelSU",
-      "repo": "https://github.com/PhamtomK12/kernel_xiaomi_odin",
-      "branch": "TDA",
-      "device": "odin"
+      "name": "Aquamarine (susfs/ksu fix)",
+      "repo": "https://github.com/pjjaxvyn2020/android_kernel_xiaomi_gale",
+      "branch": "main",
+      "device": "gale"
     },
     "withKernelSU": true,
     "toolchains": [
