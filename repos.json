@@ -1,6 +1,6 @@
 [  {
     "kernelSource": {
-      "name": "Aquamarine (susfs/ksu fix)",
+      "name": "Aquamarine",
       "repo": "https://github.com/pjjaxvyn2020/android_kernel_xiaomi_gale",
       "branch": "main",
       "device": "gale"
