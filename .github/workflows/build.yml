@@ -49,15 +49,23 @@ jobs:
       - name: "✨ Create working dir"
         run: mkdir -p $kernelDir
 
-      - name: "🐍 Setup Python 2.7"
-        uses: actions/setup-python@v5
-        with:
-          python-version: '2.7'
+      - name: "🐍 Install Portable Python 2.7"
+        run: |
+          # Fetch a pre-compiled portable python 2.7 binary environment
+          mkdir -p $HOME/python2
+          curl -sSL https://github.com/vslavik/portable-python/releases/download/v2.7.18-1/portable-python-2.7.18-x86_64.tar.gz | tar -xz -C $HOME/python2 --strip-components=1
+          
+          # Inject the new path to both your executing session and subsequent steps
+          echo "$HOME/python2/bin" >> $GITHUB_PATH
+          export PATH="$HOME/python2/bin:$PATH"
+          
+          # Test it instantly to ensure it maps right
+          python --version || python2 --version
 
       - name: "⭐ Install prerequisites"
         run: |
           sudo apt-get update
-          # Notice python2 is completely removed here because the setup-python step handles it perfectly
+          # Standard modern prerequisites package string (python2 removed)
           sudo apt-get install -y build-essential bc curl git zip ftp gcc-aarch64-linux-gnu gcc-arm-linux-gnueabi libssl-dev lftp zstd wget libfl-dev python3 libarchive-tools
 
       - name: "🌟 Clone kernel source => (${{ env.kernelRepo }})"
