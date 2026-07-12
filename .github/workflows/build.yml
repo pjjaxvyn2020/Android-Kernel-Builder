@@ -51,8 +51,12 @@ jobs:
 
       - name: "⭐ Install prerequisites"
         run: |
+          # Add legacy repository to pull deprecated python2 package
+          sudo add-apt-repository -y "deb http://archive.ubuntu.com/ubuntu/ focal universe"
           sudo apt-get update
           sudo apt-get install -y build-essential bc curl git zip ftp gcc-aarch64-linux-gnu gcc-arm-linux-gnueabi libssl-dev lftp zstd wget libfl-dev python2 python3 libarchive-tools
+          # Remove legacy repo to keep package ecosystem safe
+          sudo add-apt-repository --remove -y "deb http://archive.ubuntu.com/ubuntu/ focal universe"
 
       - name: "🌟 Clone kernel source => (${{ env.kernelRepo }})"
         working-directory: ./${{ env.kernelDir }}
